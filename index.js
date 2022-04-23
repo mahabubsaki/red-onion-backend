@@ -42,9 +42,8 @@ async function run() {
         })
         app.post('/users', async (req, res) => {
             const newUser = req.body
-            console.log(newUser)
-            const result = await userCollection.insertOne(newUser)
-            res.send(result)
+            const user = await usersCollection.insertOne(newUser)
+            res.send(user)
         })
     }
     finally {
