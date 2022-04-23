@@ -16,6 +16,7 @@ async function run() {
     try {
         await client.connect()
         const foodsCollection = client.db('redOnion').collection('foodCollection')
+        const usersCollection = client.db('redOnion').collection('userCollection')
         app.get('/foods', async (req, res) => {
             const query = {}
             const cursor = foodsCollection.find(query)
