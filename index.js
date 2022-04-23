@@ -33,6 +33,9 @@ async function run() {
             const result = await foodsCollection.insertOne(newFood)
             res.send(result)
         })
+        app.post('/users', async (req, res) => {
+
+        })
     }
     finally {
 
