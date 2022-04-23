@@ -23,6 +23,12 @@ async function run() {
             const foods = await cursor.toArray()
             res.send(foods)
         })
+        app.get('/users', async (req, res) => {
+            const query = {}
+            const cursor = usersCollection.find(query)
+            const foods = await cursor.toArray()
+            res.send(foods)
+        })
         app.get('/foods/:id', async (req, res) => {
             const id = req.params.id
             const query = { _id: ObjectId(id) }
@@ -36,6 +42,7 @@ async function run() {
         })
         app.post('/users', async (req, res) => {
             const newUser = req.body
+            console.log(newUser)
             const result = await userCollection.insertOne(newUser)
             res.send(result)
         })
