@@ -24,6 +24,13 @@ async function run() {
             res.send(foods)
         })
         app.get('/users', async (req, res) => {
+            const reqOrder = req.query
+            if (reqOrder?.reason === 'order') {
+                const query = { email: reqOrder?.email }
+                const user = await usersCollection.findOne(query)
+                console.log(user)
+                res.send(user)
+            }
             const query = {}
             const cursor = usersCollection.find(query)
             const foods = await cursor.toArray()
