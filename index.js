@@ -45,7 +45,6 @@ async function run() {
             const reqOrder = req.query
             const query = { email: reqUser.email }
             const newUser = await usersCollection.findOne(query)
-            console.log(reqOrder)
             if (reqOrder.reason === 'order') {
                 const orderQuery = { email: reqOrder.email }
                 const orderedUser = await usersCollection.findOne(orderQuery)
@@ -67,7 +66,7 @@ async function run() {
                 const result = await usersCollection.updateOne(filter, updateDoc, options);
                 res.send(result)
             }
-            if (!newUser && !reqOrder) {
+            if (!newUser && !reqOrder?.reason) {
                 const user = await usersCollection.insertOne(reqUser)
                 res.send(user)
             }
