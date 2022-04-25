@@ -42,10 +42,32 @@ async function run() {
         })
         app.post('/users', async (req, res) => {
             const reqUser = req.body
+            const reqOrder = req.query
             const query = { email: reqUser.email }
-            console.log(query)
             const newUser = await usersCollection.findOne(query)
-            if (!newUser) {
+            console.log(reqOrder)
+            if (reqOrder.reason === 'order') {
+                const orderQuery = { email: reqOrder.email }
+                const orderedUser = await usersCollection.findOne(orderQuery)
+                let allOrder;
+                if (orderedUser?.allOrder) {
+                    allOrder = [...orderedUser.allOrder]
+                }
+                else {
+                    allOrder = []
+                }
+                const { order, formInfo } = req.body
+                allOrder.push({ order, formInfo })
+                const updatedOrder = { ...orderedUser, allOrder }
+                const options = { upsert: true }
+                const filter = { email: reqOrder.email }
+                const updateDoc = {
+                    $set: updatedOrder
+                };
+                const result = await usersCollection.updateOne(filter, updateDoc, options);
+                res.send(result)
+            }
+            if (!newUser && !reqOrder) {
                 const user = await usersCollection.insertOne(reqUser)
                 res.send(user)
             }
