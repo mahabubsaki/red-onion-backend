@@ -41,9 +41,17 @@ async function run() {
             res.send(result)
         })
         app.post('/users', async (req, res) => {
-            const newUser = req.body
-            const user = await usersCollection.insertOne(newUser)
-            res.send(user)
+            const reqUser = req.body
+            const query = { email: reqUser.email }
+            console.log(query)
+            const newUser = await usersCollection.findOne(query)
+            if (!newUser) {
+                const user = await usersCollection.insertOne(reqUser)
+                res.send(user)
+            }
+            else {
+                return
+            }
         })
     }
     finally {
