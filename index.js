@@ -14,7 +14,7 @@ app.use(express.json())
 function verifyJwt(req, res, next) {
     const authHeader = req.headers.authorization
     if (!authHeader) {
-        return res.status(403).send({ message: 'Unauthorized Access' })
+        return res.status(401).send({ message: 'Unauthorized Access' })
     }
     const token = authHeader.split(' ')[1]
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
@@ -52,10 +52,16 @@ async function run() {
             res.send(foods)
         })
         app.get('/user/:email', verifyJwt, async (req, res) => {
+            const decodedEmail = req.decoded.email
             const email = req.params.email
-            const query = { email: email }
-            const user = await usersCollection.findOne(query)
-            res.send(user)
+            if (decodedEmail === email) {
+                const query = { email: email }
+                const user = await usersCollection.findOne(query)
+                res.send(user)
+            }
+            else {
+                return res.status(403).send({ message: 'Forbidden Access' })
+            }
         })
         app.get('/foods/:id', async (req, res) => {
             const id = req.params.id
