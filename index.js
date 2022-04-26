@@ -21,10 +21,11 @@ async function run() {
         const usersCollection = client.db('redOnion').collection('userCollection')
         app.post('/login', async (req, res) => {
             const user = req.body
+            console.log(user);
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
                 expiresIn: '1d'
             })
-            res.send(accessToken)
+            res.send({ accessToken })
         })
         app.get('/foods', async (req, res) => {
             const query = {}
