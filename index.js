@@ -19,7 +19,7 @@ async function run() {
         await client.connect()
         const foodsCollection = client.db('redOnion').collection('foodCollection')
         const usersCollection = client.db('redOnion').collection('userCollection')
-        app.get('/login', async (req, res) => {
+        app.post('/login', async (req, res) => {
             const user = req.body
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
                 expiresIn: '1d'
