@@ -22,8 +22,8 @@ function verifyJwt(req, res, next) {
             return res.status(403).send({ message: 'Forbidden Access' })
         }
         req.decoded = decoded
+        next()
     })
-    next()
 }
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.wcxgg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
