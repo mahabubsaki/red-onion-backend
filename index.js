@@ -63,11 +63,16 @@ async function run() {
                 return res.status(403).send({ message: 'Forbidden Access' })
             }
         })
-        app.get('/foods/:id', async (req, res) => {
-            const id = req.params.id
-            const query = { _id: ObjectId(id) }
+        app.get('/food', async (req, res) => {
+            const id = req.query.id
+            const query = { id: id }
             const food = await foodsCollection.findOne(query)
-            res.send(food)
+            if (food !== null) {
+                res.send(food)
+            }
+            else {
+                res.send({})
+            }
         })
         app.post('/foods', async (req, res) => {
             const newFood = req.body
