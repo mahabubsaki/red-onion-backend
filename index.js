@@ -32,6 +32,17 @@ async function run() {
         await client.connect()
         const foodsCollection = client.db('redOnion').collection('foodCollection')
         const usersCollection = client.db('redOnion').collection('userCollection')
+        app.post('/user', async (req, res) => {
+            const email = req.query.email
+            const query = { email: email }
+            const user = await usersCollection.findOne(query)
+            if (user?.email) {
+                res.send({ result: 'success' })
+            }
+            else {
+                res.send({ result: 'failed' })
+            }
+        })
         app.post('/login', async (req, res) => {
             const user = req.body
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
