@@ -35,6 +35,13 @@ async function run() {
         app.put('/updateOrder', async (req, res) => {
             const { email } = req.query
             const updatedOrder = req.body
+            if (!updatedOrder["allOrder"]) {
+                const filter = { email: email }
+                const options = { upsert: true };
+                const updateDoc = { $unset: updatedOrder }
+                const result = await usersCollection.updateOne(filter, updateDoc, options);
+                res.send(result)
+            }
             const filter = { email: email }
             const options = { upsert: true };
             const updateDoc = {
@@ -42,7 +49,6 @@ async function run() {
             };
             const result = await usersCollection.updateOne(filter, updateDoc, options);
             res.send(result);
-
         })
         app.get('/order', async (req, res) => {
             const { email } = req.query
