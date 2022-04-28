@@ -41,6 +41,7 @@ async function run() {
                 const updateDoc = { $unset: updatedOrder }
                 const result = await usersCollection.updateOne(filter, updateDoc, options);
                 res.send(result)
+                return
             }
             const filter = { email: email }
             const options = { upsert: true };
