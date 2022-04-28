@@ -32,6 +32,24 @@ async function run() {
         await client.connect()
         const foodsCollection = client.db('redOnion').collection('foodCollection')
         const usersCollection = client.db('redOnion').collection('userCollection')
+        app.put('/updateOrder', async (req, res) => {
+            const { email } = req.query
+            const updatedOrder = req.body
+            const filter = { email: email }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: updatedOrder
+            };
+            const result = await usersCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+
+        })
+        app.get('/order', async (req, res) => {
+            const { email } = req.query
+            const query = { email: email }
+            const specificUser = await usersCollection.findOne(query)
+            res.send(specificUser)
+        })
         app.post('/user', async (req, res) => {
             const email = req.query.email
             const query = { email: email }
